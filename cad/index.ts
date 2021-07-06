@@ -1,6 +1,7 @@
 import { Dot } from "./models/dot";
 import { Layer } from "./models/layer";
 import { Line } from "./models/line";
+import { IPrimitive } from "./models/primitive";
 
 export const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
@@ -11,9 +12,9 @@ export class CrollCad {
     
     ) { }
 
-    createLayer(box?: DOMRect): Layer {
+    createLayer(box?: DOMRect, primitives?: IPrimitive[]): Layer {
 
-        const layer = new Layer();
+        const layer = new Layer(primitives);
 
         if (box == null) {
             const rect = this._element.getBoundingClientRect();
