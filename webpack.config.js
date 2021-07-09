@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   watch: true,
-  entry: './script.js',
+  entry: './cad/index.ts',
   devtool: 'inline-source-map',
   module: {
     rules: [
@@ -15,10 +15,14 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts'],
   },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    library: {
+      name: 'CrollCad',
+      type: 'var',
+    }
   },
 };

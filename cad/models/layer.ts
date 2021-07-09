@@ -1,5 +1,4 @@
-import { SVG_NAMESPACE } from "..";
-import { Renderers } from "../renderers";
+import { SVG_NAMESPACE } from "./constants";
 import { IPrimitive } from "./primitive";
 
 export class Layer {
@@ -13,7 +12,7 @@ export class Layer {
 
         this.host = document.createElementNS(SVG_NAMESPACE, 'svg');
         
-        primitives.forEach(p => this.draw(p));
+        primitives.forEach(p => p.render(this));
         
     }
     
@@ -32,9 +31,10 @@ export class Layer {
 
     }
 
-    draw(primitive: IPrimitive): void {
-        
-        Renderers.getRenderer(primitive).render(this, primitive);
+    add(primitive: IPrimitive): void {
+
+        this.primitives.push(primitive);
+        primitive.render(this);
 
     }
 
