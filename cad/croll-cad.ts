@@ -1,40 +1,59 @@
+import { SVG_NAMESPACE } from "./models/constants";
 import { Dot } from "./models/dot";
-import { Layer } from "./models/layer";
+import { Group } from "./models/group";
 import { Line } from "./models/line";
 import { IPrimitive } from "./models/primitive";
 
 export default class {
 
+    primitives: IPrimitive[] = [];
+    private _element: SVGSVGElement;
+
     constructor(
-        private _element: HTMLElement,
+        host: HTMLElement,
     
-    ) { }
+    ) {
 
-    createLayer(box?: DOMRect, primitives?: IPrimitive[]): Layer {
-
-        const layer = new Layer(primitives);
-
-        if (box == null) {
-            const rect = this._element.getBoundingClientRect();
-            const height = rect.height;
-            const width = rect.width;
-            layer.place(this._element, new DOMRect(0, 0, width, height));
+        this._element = document.createElementNS(SVG_NAMESPACE, 'svg');
         
-        } else {
-            layer.place(this._element, box);
-        
-        }
+        host.style.position = 'relative';
+        const rect = host.getBoundingClientRect();
 
-        return layer;
+        this._element.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+        this._element.style.position = 'absolute';
+        this._element.style.top = `0`;
+        this._element.style.left = `0`;
+        this._element.style.width = `${rect.width}px`;
+        this._element.style.height = `${rect.height}px`;
+
+        host.appendChild(this._element);
 
     }
 
-    static createLine(x1: number, y1: number, x2: number, y2: number): Line {
+    add(primitives: IPrimitive | IPrimitive[]): void {
 
-        const dot1 = new Dot(x1, y1);
-        const dot2 = new Dot(x2, y2);
+        const _primitives = Array.isArray(primitives) ? primitives : [primitives];
 
-        return new Line(dot1, dot2);
+        this.primitives.unshift(..._primitives);
+        _primitives.forEach(p => p.render(this._element));
+
+    }
+
+    static createGroup(primitives?: IPrimitive[]): Group {
+
+        return new Group(primitives);
+
+    }
+
+    static createLine(x: number, y: number, x2: number, y2: number, stroke?: string, weight?: number): Line {
+
+        return new Line(x, y, x2, y2, stroke, weight);
+
+    }
+    
+    static createDot(x: number, y: number, stroke?: string): Dot {
+
+        return new Dot(x, y, stroke);
 
     }
 

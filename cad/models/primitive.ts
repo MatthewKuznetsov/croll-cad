@@ -1,12 +1,15 @@
-import { Layer } from "./layer";
 
 export enum PrimitivesTypes {
     LINE = 'line',
+    DOT = 'dot',
+    GROUP = 'group',
     
 }
 
 export interface IPrimitive {
-    type: PrimitivesTypes;
-    render(layer: Layer): void;
+    readonly type: PrimitivesTypes;
+    element: SVGGraphicsElement;
+
+    render(host: SVGGraphicsElement): void;
 
 }

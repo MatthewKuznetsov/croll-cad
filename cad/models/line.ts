@@ -1,32 +1,35 @@
 import { SVG_NAMESPACE } from "./constants";
-import { Dot } from "./dot";
-import { Layer } from "./layer";
 import { IPrimitive, PrimitivesTypes } from "./primitive";
 
 export class Line implements IPrimitive {
 
     type = PrimitivesTypes.LINE;
+    element: SVGLineElement;
 
     constructor(
-        public start: Dot,
-        public end: Dot,
+        public x: number,
+        public y: number,
+        public x2: number,
+        public y2: number,
         public stroke = '#000',
         public weight = 1,
 
-    ) { }
+    ) {
 
-    render(layer: Layer): void {
+        this.element = document.createElementNS(SVG_NAMESPACE, 'line');
 
-        const element = document.createElementNS(SVG_NAMESPACE, 'line');
+    }
 
-        element.setAttribute('x1', `${this.start.x}`);
-        element.setAttribute('y1', `${this.start.y}`);
-        element.setAttribute('x2', `${this.end.x}`);
-        element.setAttribute('y2', `${this.end.y}`);
-        element.setAttribute('stroke', this.stroke);
-        element.setAttribute('stroke-width', `${this.weight}`);
+    render(host: SVGGraphicsElement): void {
 
-        layer.host.appendChild(element);
+        this.element.setAttribute('x1', `${this.x}`);
+        this.element.setAttribute('y1', `${this.y}`);
+        this.element.setAttribute('x2', `${this.x2}`);
+        this.element.setAttribute('y2', `${this.y2}`);
+        this.element.setAttribute('stroke', this.stroke);
+        this.element.setAttribute('stroke-width', `${this.weight}`);
+
+        host.appendChild(this.element);
     
     }
 
