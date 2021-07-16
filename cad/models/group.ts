@@ -1,3 +1,4 @@
+
 import { SVG_NAMESPACE } from "./constants";
 import { IPrimitive, PrimitivesTypes } from "./primitive";
 

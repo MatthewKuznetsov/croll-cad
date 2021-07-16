@@ -2,6 +2,7 @@
 export enum PrimitivesTypes {
     LINE = 'line',
     DOT = 'dot',
+    RECTANGLE = 'rectangle',
     GROUP = 'group',
     
 }

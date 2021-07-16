@@ -1,8 +1,10 @@
+
 import { SVG_NAMESPACE } from "./models/constants";
 import { Dot } from "./models/dot";
 import { Group } from "./models/group";
 import { Line } from "./models/line";
 import { IPrimitive } from "./models/primitive";
+import { Rectangle } from "./models/rectangle";
 
 export default class {
 
@@ -54,6 +56,12 @@ export default class {
     static createDot(x: number, y: number, stroke?: string): Dot {
 
         return new Dot(x, y, stroke);
+
+    }
+
+    static createRectangle(x: number, y: number, width: number, height: number, stroke?: string, fill?: string): Rectangle {
+
+        return new Rectangle(x, y, width, height, stroke, fill);
 
     }
 
