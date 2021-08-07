@@ -1,34 +1,70 @@
 
 import { SVG_NAMESPACE } from "./constants";
-import { IPrimitive, PrimitivesTypes } from "./primitive";
+import { Group } from "./group";
+import { Primitive, PrimitivesTypes } from "./primitive";
 
-export class Dot implements IPrimitive {
+export interface IDotOptions {
+    x?: number;
+    y?: number;
+    stroke?: string;
+}
 
-    readonly type: PrimitivesTypes.DOT;
+export class Dot extends Primitive {
+
     private readonly _radius = 1;
+
     element: SVGCircleElement;
 
     constructor(
-        public x: number,
-        public y: number,
-        public stroke = '#000',
+        public parent: Group,
+        private _x: number,
+        private _y: number,
+        private _stroke = '#000',
 
     ) {
 
-        this.element = document.createElementNS(SVG_NAMESPACE, 'circle')
+        super(PrimitivesTypes.DOT, parent);
 
-    }
+        this.element = document.createElementNS(SVG_NAMESPACE, 'circle');
 
-    render(host: SVGGraphicsElement): void {
-
-        this.element.setAttribute('cx', `${this.x}`);
-        this.element.setAttribute('cy', `${this.y}`);
-        this.element.setAttribute('r', `${this._radius}`);
-        this.element.setAttribute('stroke', this.stroke);
-        this.element.setAttribute('fill', this.stroke);
-
-        host.appendChild(this.element);
+        this.change({ x: _x, y: _y, stroke: _stroke });
     
     }
+
+    getOptions(): IDotOptions {
+        
+        return {
+            x: this._x,
+            y: this._y,
+            stroke: this._stroke,
+        }
+
+    }
+
+    change(options: IDotOptions): Dot {
+
+        const full: IDotOptions = {
+            x: options.x != null ? options.x : this._x,
+            y: options.y != null ? options.y : this._y,
+            stroke: options.stroke != null ? options.stroke : this._stroke,
+        };
+
+        this.element.setAttribute('cx', `${full.x}`);
+        this.element.setAttribute('cy', `${full.y}`);
+        this.element.setAttribute('r', `${this._radius}`);
+        this.element.setAttribute('stroke', full.stroke);
+        this.element.setAttribute('fill', full.stroke);
+
+        return this;
+        
+    }
+
+    remove(): void {
+        
+        this.parent.removeChildren([this]);
+
+    }
+
+
 
 }
